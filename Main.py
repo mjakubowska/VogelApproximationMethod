@@ -1,5 +1,4 @@
 import sys
-from checkData import FileErrors
 import checkData.FileErrors as fe
 
 
