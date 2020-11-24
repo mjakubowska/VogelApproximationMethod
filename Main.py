@@ -6,7 +6,7 @@ def main():
     if len(sys.argv) > 1:
         filePath = sys.argv[1]
         print(filePath)
-    fe.check_syntax("sample.txt")
+    fe.load_data("sample.txt")
 
 
 if __name__ == "__main__":
