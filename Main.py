@@ -1,6 +1,7 @@
 import sys
 from checkData.Loader import Loader
-from alg.Vogl import Vogl
+from alg.Vogl import Vogl, find_2min_diff
+from model.Contract import Contract
 
 
 def main():
@@ -10,7 +11,7 @@ def main():
     loader = Loader()
     loader.load_data("sample.txt")
     vogl = Vogl(loader)
-    vogl.print_matrix()
+    print(vogl.add_to_solution())
 
 
 if __name__ == "__main__":

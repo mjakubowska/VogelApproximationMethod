@@ -33,7 +33,7 @@ class Loader:
                         raise ValueError("Niepoprawny index producenta")
                     index_pr = idn
                     name = re.match(pr_ph_reg_ex, line).group(2)
-                    amount = re.match(pr_ph_reg_ex, line).group(3)
+                    amount = int(re.match(pr_ph_reg_ex, line).group(3))
                     self.producers.append(pr.Producer(idn, name, amount))
                     n += 1
                 else:
@@ -57,7 +57,7 @@ class Loader:
                         raise ValueError("Niepoprawny index apteki")
                     index_ph = idn
                     name = re.match(pr_ph_reg_ex, line).group(2)
-                    amount = re.match(pr_ph_reg_ex, line).group(3)
+                    amount = int(re.match(pr_ph_reg_ex, line).group(3))
                     self.pharmacies.append(ph.Pharmacy(idn, name, amount))
                     n += 1
                 else:
@@ -82,11 +82,10 @@ class Loader:
                 if re.match(cr_reg_ex, line):
                     id_pr = int(re.match(cr_reg_ex, line).group(1))
                     id_ph = int(re.match(cr_reg_ex, line).group(2))
-                    amount = re.match(cr_reg_ex, line).group(3)
-                    price = re.match(cr_reg_ex, line).group(4)
+                    amount = int(re.match(cr_reg_ex, line).group(3))
+                    price = float(re.match(cr_reg_ex, line).group(4))
                     if id_pr == index_pr:
                         if id_ph - index_ph != 1:
-                            #print(self.contracts)
                             raise ValueError("Bad index 1")
                         index_ph = id_ph
                         producers_contracts.append(cr.Contract(id_pr, id_ph, amount, price))
@@ -109,4 +108,4 @@ class Loader:
                 raise ValueError("Za dużo producentów w umowach")
 
             print("wczytano umowy")
-            # print(self.contracts)
+            print(self.contracts[0][2])
