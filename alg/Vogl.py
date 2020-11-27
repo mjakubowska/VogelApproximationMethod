@@ -61,12 +61,39 @@ class Vogl:
         id_ph = self.matrix[index_r][index_c].id_ph
         producer = self.loader.producers[id_pr]
         pharmacy = self.loader.pharmacies[id_ph]
-        if pharmacy.amount > contract.amount:
-            deal = Deal(producer, pharmacy, contract.amount, contract.price)
+        if pharmacy.amount > producer.amount:
+            if producer.amount > contract.amount:
+                deal_amount = contract.amount
+            else:
+                deal_amount = producer.amount
+            deal = Deal(producer, pharmacy, deal_amount, contract.price)
             self.solution.append(deal)
-            self.loader.producers[id_pr].amount -= contract.amount
-            self.loader.pharmacies[id_ph].amount -= contract.amount
-        print("solution: ", self.solution)
-        print("pharma: ", pharmacy)
-        print("producer: ", producer)
+            self.loader.producers[id_pr].amount -= deal_amount
+            self.loader.pharmacies[id_ph].amount -= deal_amount
+            self.matrix[index_r][index_c].amount -= deal_amount
+            if self.matrix[index_r][index_c].amount == 0:
+                self.matrix[index_r][index_c] = None
+            if producer.amount == 0:
+                del self.matrix[id_pr]
+        if pharmacy.amount <= producer.amount:
+            if pharmacy.amount > contract.amount:
+                deal_amount = contract.amount
+            else:
+                deal_amount = pharmacy.amount
+            print("deal_ammount: ", deal_amount)
+            deal = Deal(producer, pharmacy, deal_amount, contract.price)
+            self.solution.append(deal)
+            self.loader.producers[id_pr].amount -= deal_amount
+            self.loader.pharmacies[id_ph].amount -= deal_amount
+            self.matrix[index_r][index_c].amount -= deal_amount
+            if self.matrix[index_r][index_c].amount == 0:
+                self.matrix[index_r][index_c] = None
+            if self.loader.producers[id_pr].amount == 0:
+                del self.matrix[id_pr]
+            if self.loader.pharmacies[id_ph].amount == 0:
+                for i in range(len(self.matrix)):
+                    del self.matrix[i][id_ph]
+
+   # def algorithm_loop(self):
+
 
