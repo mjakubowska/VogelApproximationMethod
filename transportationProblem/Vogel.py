@@ -33,7 +33,6 @@ class Vogel:
     def create_configuration(self):
         while len(self.matrix) > 0:
             self.fill_pharmacy()
-        print(self.solution)
 
     def print_matrix(self):
         for i in range(len(self.matrix)):
