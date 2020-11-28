@@ -88,15 +88,21 @@ class Loader:
                         if id_ph - index_ph != 1:
                             raise ValueError("Bad index 1")
                         index_ph = id_ph
-                        producers_contracts.append(cr.Contract(id_pr, id_ph, amount, price))
+                        if id_pr == 0:
+                            self.contracts.append([])
+                            self.contracts[id_ph].append(cr.Contract(id_pr, id_ph, amount, price))
+                        else:
+                            self.contracts[id_ph].append(cr.Contract(id_pr, id_ph, amount, price))
                     elif id_pr - index_pr == 1:
                         index_ph = 0
                         if id_ph - index_ph != 0:
                             raise ValueError("Bad index 3")
                         index_pr = id_pr
-                        producers_contracts = [cr.Contract(id_pr, id_ph, amount, price)]
-                        if id_ph  == 0:
-                            self.contracts.append(producers_contracts)
+                        if id_pr == 0:
+                            self.contracts.append([])
+                            self.contracts[0].append(cr.Contract(id_pr, id_ph, amount, price))
+                        else:
+                            self.contracts[id_ph].append(cr.Contract(id_pr, id_ph, amount, price))
                     else:
                         raise ValueError("Bad index 4")
                     n += 1
@@ -108,4 +114,4 @@ class Loader:
                 raise ValueError("Za dużo producentów w umowach")
 
             print("wczytano umowy")
-            print(self.contracts[0][2])
+            print(self.contracts)

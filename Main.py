@@ -11,7 +11,7 @@ def main():
     loader = Loader()
     loader.load_data("sample.txt")
     vogl = Vogl(loader)
-    print(vogl.add_to_solution())
+    print(vogl.find_max_mins())
 
 
 if __name__ == "__main__":
