@@ -5,13 +5,13 @@ import model.Contract as cr
 
 
 class Loader:
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self.producers = []
         self.pharmacies = []
         self.contracts = []
 
     def load_data(self, file):
-        # with open(input_file, "r") as file:
         n = 1
         line = file.readline().rstrip()
         if line.lstrip()[0] != "#":
@@ -104,3 +104,4 @@ class Loader:
         if index_pr > len(self.producers) - 1:
             raise ValueError("Za dużo producentów w umowach")
         print("wczytano umowy")
+        print(f"wczytano dane z pliku {file.name}")

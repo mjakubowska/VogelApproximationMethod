@@ -1,10 +1,11 @@
 from operator import attrgetter
-from checkData.Loader import Loader
-from model.Deal import Deal
-from model.Configuration import Configuration
+from writeFile.Deal import Deal
+from writeFile.Configuration import Configuration
 
 
 def find_2min_diff(min_list):
+    if len(min_list) <= 1:
+        return 0
     min1 = min(min_list[0].price, min_list[1].price)
     min2 = max(min_list[0].price, min_list[1].price)
     for x in min_list[2::]:
@@ -15,7 +16,7 @@ def find_2min_diff(min_list):
     return round(min2 - min1, 2)
 
 
-class Vogl:
+class Vogel:
     def __init__(self, loader):
         self.matrix = []
         self.min_r = []
@@ -28,13 +29,10 @@ class Vogl:
         for producers in range(rows):
             self.matrix.insert(producers, contracts[producers])
         self._find_mins()
-        print(self.matrix)
-        itr = 0
+
+    def create_configuration(self):
         while len(self.matrix) > 0:
             self.fill_pharmacy()
-            itr += 1
-        print(len(self.matrix))
-        print(self.matrix)
         print(self.solution)
 
     def print_matrix(self):
@@ -58,7 +56,7 @@ class Vogl:
     def find_max_mins(self):
         value_c = max(self.min_c)
         value_r = max(self.min_r)
-        if value_c > value_r: # >
+        if value_c > value_r:
             index_c = self.min_c.index(value_c)
             index_r = self.matrix.index(min(self.matrix, key=lambda x: x[index_c].price))
         else: # value_r >= value_c
@@ -85,7 +83,7 @@ class Vogl:
                 self.loader.producers[id_pr].amount -= deal_amount
                 self.loader.pharmacies[id_ph].amount -= deal_amount
                 self.matrix[index_r][index_c].amount -= deal_amount
-                if self.matrix[index_r][index_c].amount == 0: #jesli kontrakt sie wyczerpal
+                if self.matrix[index_r][index_c].amount == 0:
                     del self.matrix[index_r][index_c]
                 if self.loader.producers[id_pr].amount == 0:
                     for i in range(len(self.matrix)):
@@ -95,7 +93,6 @@ class Vogl:
                 if self.loader.pharmacies[id_ph].amount == 0:
                     del self.matrix[index_r]
                     del self.min_r[index_r]
-                    # print(f"Hurra, wypelniono apteke {id_ph}!!!")
                     break
             elif pharmacy.amount > producer.amount:
                 if producer.amount > contract.amount:

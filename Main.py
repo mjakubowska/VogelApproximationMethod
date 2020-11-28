@@ -1,24 +1,26 @@
 import sys
 from checkData.Loader import Loader
-from transportationProblem.Vogl import Vogl, find_2min_diff
+from transportationProblem.Vogel import Vogel, find_2min_diff
 from model.Contract import Contract
 
 
 def main():
-    try:
-        file_input = sys.argv[1]
-    except IndexError:
-        print("brak argumentu wywołania")
-        sys.exit(1)
-    try:
-        file = open(file_input, 'r')
-        loader = Loader()
-        loader.load_data(file)
-    except OSError as e:
-        print(f"Błędny argument wywołania, nie można otworzyć pliku {sys.argv[1]}")
-        sys.exit(2)
-    # vogl = Vogl(loader)
-    #print(vogl.find_max_mins())
+    for i in range(1, len(sys.argv)):
+        try:
+            file_input = sys.argv[i]
+        except IndexError:
+            print("brak argumentu wywołania")
+            sys.exit(1)
+        try:
+            file = open(file_input, 'r')
+            loader = Loader(file_input+'_result')
+            loader.load_data(file)
+            vogel = Vogel(loader)
+            vogel.create_configuration()
+            file_name = file_input[:-4] + '-result.txt'
+            vogel.solution.write_to_file(file_name)
+        except OSError as e:
+            print(f"Błędny argument wywołania, nie można wczytać pliku {sys.argv[i]}")
 
 
 if __name__ == "__main__":
