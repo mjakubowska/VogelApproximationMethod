@@ -6,5 +6,5 @@ class Deal:
         self.price = price
 
     def __repr__(self):
-        return f"{self.producer.name} -> {self.pharmacy.name} [Koszt = {self.amount} * {self.price} = {self.amount*self.price} zl] "
+        return f"{self.producer.name} -> {self.pharmacy.name} [Koszt = {self.amount} * {self.price} = {round(self.amount*self.price, 2)} zl] "
 

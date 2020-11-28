@@ -1,6 +1,7 @@
 from operator import attrgetter
 from checkData.Loader import Loader
 from model.Deal import Deal
+from model.Configuration import Configuration
 
 
 def find_2min_diff(min_list):
@@ -20,14 +21,21 @@ class Vogl:
         self.min_r = []
         self.min_c = []
         self.loader = loader
-        self.solution = []
-        self._load_contracts(loader.contracts, len(loader.producers))
+        self.solution = Configuration()
+        self._load_contracts(loader.contracts, len(loader.pharmacies))
 
     def _load_contracts(self, contracts, rows):
         for producers in range(rows):
             self.matrix.insert(producers, contracts[producers])
         self._find_mins()
-        # self.find_max_mins()
+        print(self.matrix)
+        itr = 0
+        while len(self.matrix) > 0:
+            self.fill_pharmacy()
+            itr += 1
+        print(len(self.matrix))
+        print(self.matrix)
+        print(self.solution)
 
     def print_matrix(self):
         for i in range(len(self.matrix)):
@@ -41,11 +49,15 @@ class Vogl:
             for rows in range(len(self.matrix)):
                 column.append(self.matrix[rows][columns])
             self.min_c.append(find_2min_diff(column))
-        print(f"min_r: {self.min_r}, min_c: {self.min_c}")
+
+    def _update_mins(self):
+        self.min_r = []
+        for rows in self.matrix:
+            self.min_r.append(find_2min_diff(rows))
 
     def find_max_mins(self):
-        value_c = max(self.min_c) #max
-        value_r = max(self.min_r) #max
+        value_c = max(self.min_c)
+        value_r = max(self.min_r)
         if value_c > value_r: # >
             index_c = self.min_c.index(value_c)
             index_r = self.matrix.index(min(self.matrix, key=lambda x: x[index_c].price))
@@ -67,36 +79,45 @@ class Vogl:
                     deal_amount = contract.amount
                 else:
                     deal_amount = pharmacy.amount
-                print("deal_ammount: ", deal_amount)
                 deal = Deal(producer, pharmacy, deal_amount, contract.price)
-                self.solution.append(deal)
+                self.solution.deals.append(deal)
+                self.solution.cost += round(deal_amount * contract.price, 2)
                 self.loader.producers[id_pr].amount -= deal_amount
                 self.loader.pharmacies[id_ph].amount -= deal_amount
                 self.matrix[index_r][index_c].amount -= deal_amount
-                if self.matrix[index_r][index_c].amount == 0:
+                if self.matrix[index_r][index_c].amount == 0: #jesli kontrakt sie wyczerpal
                     del self.matrix[index_r][index_c]
                 if self.loader.producers[id_pr].amount == 0:
-                    del self.matrix[id_pr]
-                if self.loader.pharmacies[id_ph].amount == 0:
                     for i in range(len(self.matrix)):
-                        del self.matrix[i][id_ph]
+                        del self.matrix[i][index_c]
+                    del self.min_c[index_c]
+                    self._update_mins()
+                if self.loader.pharmacies[id_ph].amount == 0:
+                    del self.matrix[index_r]
+                    del self.min_r[index_r]
+                    # print(f"Hurra, wypelniono apteke {id_ph}!!!")
+                    break
             elif pharmacy.amount > producer.amount:
                 if producer.amount > contract.amount:
                     deal_amount = contract.amount
                 else:
                     deal_amount = producer.amount
                 deal = Deal(producer, pharmacy, deal_amount, contract.price)
-                self.solution.append(deal)
+                self.solution.deals.append(deal)
+                self.solution.cost += round(deal_amount * contract.price, 2)
                 self.loader.producers[id_pr].amount -= deal_amount
                 self.loader.pharmacies[id_ph].amount -= deal_amount
                 self.matrix[index_r][index_c].amount -= deal_amount
                 if self.matrix[index_r][index_c].amount == 0:
-                    self.matrix[index_r][index_c] = None
+                    del self.matrix[index_r][index_c]
                 if producer.amount == 0:
-                    del self.matrix[id_pr]
-            index_r = self.matrix.index(min(self.matrix, key=lambda x: x[id_ph].price))
-            print("index_r after loop: ", index_r)
+                    for i in range(len(self.matrix)):
+                        del self.matrix[i][index_c]
+                    del self.min_c[index_c]
+                    self._update_mins()
+            if len(self.matrix[index_r]) == 0:
+                print(f"Nie udało się zapełcić apteki {id_ph}")
+                break
+            index_c = self.matrix[index_r].index(min(self.matrix[index_r], key=attrgetter('price')))
             contract = self.matrix[index_r][index_c]
             id_pr = self.matrix[index_r][index_c].id_pr
-
-        producer = self.loader.producers[id_pr]
