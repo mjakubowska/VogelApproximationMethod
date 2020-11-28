@@ -1,5 +1,6 @@
 import codecs
 
+
 class Configuration:
     def __init__(self):
         self.deals = []
@@ -15,4 +16,5 @@ class Configuration:
     def write_to_file(self, file_name):
         text_file = codecs.open(file_name, "w", "utf-8")
         text_file.write(self.__repr__())
+        print(f"Wynik zapisano do pliku {file_name}")
         text_file.close()
