@@ -47,10 +47,24 @@ class Vogel:
                 column.append(self.matrix[rows][columns])
             self.min_c.append(find_2min_diff(column))
 
-    def _update_mins(self):
+    def _update_rows_mins(self):
+        if len(self.matrix) < 1:
+            return
         self.min_r = []
         for rows in self.matrix:
             self.min_r.append(find_2min_diff(rows))
+
+    def _update_columns_mins(self):
+        if len(self.matrix) < 1:
+            return
+        if len(self.matrix[0]):
+            return
+        self.min_c = []
+        for columns in range(len(self.matrix[0])):
+            column = []
+            for rows in range(len(self.matrix)):
+                column.append(self.matrix[rows][columns])
+            self.min_c.append(find_2min_diff(column))
 
     def find_max_mins(self):
         value_c = max(self.min_c)
@@ -88,10 +102,11 @@ class Vogel:
                     for i in range(len(self.matrix)):
                         del self.matrix[i][index_c]
                     del self.min_c[index_c]
-                    self._update_mins()
+                    self._update_rows_mins()
                 if self.loader.pharmacies[id_ph].amount == 0:
                     del self.matrix[index_r]
                     del self.min_r[index_r]
+                    self._update_columns_mins()
                     break
             elif pharmacy.amount > producer.amount:
                 if producer.amount > contract.amount:
@@ -110,10 +125,9 @@ class Vogel:
                     for i in range(len(self.matrix)):
                         del self.matrix[i][index_c]
                     del self.min_c[index_c]
-                    self._update_mins()
+                    self._update_rows_mins()
             if len(self.matrix[index_r]) == 0:
-                print(f"Nie udało się zapełcić apteki {id_ph}")
-                break
+                raise ValueError(f"Nie udało się zapełcić aptek")
             index_c = self.matrix[index_r].index(min(self.matrix[index_r], key=attrgetter('price')))
             contract = self.matrix[index_r][index_c]
             id_pr = self.matrix[index_r][index_c].id_pr

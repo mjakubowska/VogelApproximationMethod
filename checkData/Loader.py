@@ -27,7 +27,7 @@ class Loader:
             if re.match(pr_ph_reg_ex, line):
                 idn = int(re.match(pr_ph_reg_ex, line).group(1))
                 if idn - index_pr != 1:
-                    raise ValueError(f"Błąd w wersie {n}: Niepoprawny index producenta")
+                    raise ValueError(f"Błąd w wersie {n}: \"{line}\"\n Niepoprawny index producenta")
                 index_pr = idn
                 name = re.match(pr_ph_reg_ex, line).group(2)
                 amount = int(re.match(pr_ph_reg_ex, line).group(3))
@@ -37,7 +37,7 @@ class Loader:
         print("wczytano producentów")
         if line.lstrip()[0] != "#":
             raise ValueError(
-                f"Błąd w wersie {n}, błędne dane producenta lub zły nagłówek\n"
+                f"Błąd w wersie {n}, błędne dane producenta lub zły nagłówek: \"{line}\"\n"
                 f"Poptawna forma danych producenta: id | nazwa | dzienna produkcja\n"
                 f"Poprawny nagłówek powinien zaczynać się od znaku \"#\"")
         index_ph = -1
@@ -47,7 +47,7 @@ class Loader:
             if re.match(pr_ph_reg_ex, line):
                 idn = int(re.match(pr_ph_reg_ex, line).group(1))
                 if idn - index_ph != 1:
-                    raise ValueError(f"Błąd w wersie {n}: Niepoprawny index apteki")
+                    raise ValueError(f"Błąd w wersie {n}: \"{line}\" Niepoprawny index apteki")
                 index_ph = idn
                 name = re.match(pr_ph_reg_ex, line).group(2)
                 amount = int(re.match(pr_ph_reg_ex, line).group(3))
@@ -58,7 +58,7 @@ class Loader:
         line = line.rstrip()
         if line.lstrip()[0] != "#":
             raise ValueError(
-                 f"Błąd w wersie {n}, błędne dane apteki lub zły nagłówek\n"
+                 f"Błąd w wersie {n}, błędne dane apteki lub zły nagłówek: \"{line}\"\n"
                  f"Poptawna forma danych apteki: id | nazwa | dzienne zapotrzebowanie\n"
                  f"Poprawny nagłówek powinien zaczynać się od znaku \"#\"")
         cr_reg_ex = r"[ ]*(\d+)+[ ]{0,}\|+[ ]*(\d+)+[ ]*\|[ ]*(\d+)+[ ]*\|+[ ]*(\d+.{0,1}\d{1,2})[ ]*"
