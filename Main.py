@@ -15,14 +15,17 @@ def main():
             sys.exit(1)
         try:
             file = open(file_input, 'r')
+        except OSError:
+            print(f"Błędny argument wywołania, nie można wczytać pliku {sys.argv[i]}")
+        else:
             loader = Loader(file_input + '_result')
             loader.load_data(file)
+            file.close()
             vogel = Vogel(loader)
+            vogel.load_contracts()
             vogel.create_configuration()
             file_name = file_input[:-4] + '-result.txt'
             vogel.solution.write_to_file(file_name)
-        except OSError:
-            print(f"Błędny argument wywołania, nie można wczytać pliku {sys.argv[i]}")
 
 
 if __name__ == "__main__":

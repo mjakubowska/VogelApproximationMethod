@@ -1,4 +1,5 @@
 import re
+import sys
 import model.Producer as pr
 import model.Pharmacy as ph
 import model.Contract as cr
@@ -14,11 +15,15 @@ class Loader:
     def load_data(self, file):
         n = 1
         line = file.readline().rstrip()
-        if line.lstrip()[0] != "#":
-            raise ValueError(
-                f"Błąd w wersie {n} \"{line}\"\n"
-                f"Nagłowek powinien zaczynać się od znaku \"#\"\n"
-                f"Np. \"# Producenci szczepionek (id | nazwa | dzienna produkcja)\"")
+        try:
+            if line.lstrip()[0] != "#":
+                raise ValueError(
+                    f"Błąd w wersie {n} \"{line}\"\n"
+                    f"Nagłowek powinien zaczynać się od znaku \"#\"\n"
+                    f"Np. \"# Producenci szczepionek (id | nazwa | dzienna produkcja)\"")
+        except IndexError:
+            print("plik jest pusty")
+            sys.exit(1)
         pr_ph_reg_ex = r"[ ]{0,}(\d+)+[ ]{0,}\|+[ ]{0,}(\w+[\w\-!@#$%^&*()+=.,<>\[\]\/{}\?\\'\";:~` ]+)\|+[ ]{0,}(\d+)"
         index_pr = -1
         while True:
@@ -34,7 +39,7 @@ class Loader:
                 self.producers.append(pr.Producer(idn, name, amount))
             else:
                 break
-        print("wczytano producentów")
+        # print("wczytano producentów")
         if line.lstrip()[0] != "#":
             raise ValueError(
                 f"Błąd w wersie {n}, błędne dane producenta lub zły nagłówek: \"{line}\"\n"
@@ -54,7 +59,7 @@ class Loader:
                 self.pharmacies.append(ph.Pharmacy(idn, name, amount))
             else:
                 break
-        print("wczytano apteki")
+        # print("wczytano apteki")
         line = line.rstrip()
         if line.lstrip()[0] != "#":
             raise ValueError(
@@ -103,5 +108,14 @@ class Loader:
             raise ValueError(f"Brakuje umów producenta o id {len(self.producers) - 1}")
         if index_pr > len(self.producers) - 1:
             raise ValueError("Za dużo producentów w umowach")
-        print("wczytano umowy")
+        # print("wczytano umowy")
         print(f"wczytano dane z pliku {file.name}")
+
+    def set_pharmacies(self, ph_list):
+        self.pharmacies = ph_list
+
+    def set_producers(self, pr_list):
+        self.producers = pr_list
+
+    def set_contracts(self, cr_list):
+        self.contracts
