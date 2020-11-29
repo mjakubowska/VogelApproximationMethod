@@ -1,6 +1,7 @@
 import unittest
-from src.transportationProblem.Vogel import *
-from src.model.Contract import Contract
+from transportationProblem.Vogel import *
+from model.Contract import Contract
+from checkData.Loader import Loader
 
 
 class TestVogel(unittest.TestCase):
@@ -24,7 +25,7 @@ class TestVogel(unittest.TestCase):
 
     def test_should_find_mins(self):
         # before
-        file = open('data1.txt', 'r')
+        file = open('data2.txt', 'r')
         loader = Loader('test_data1.txt' + '_result')
         loader.load_data(file)
         file.close()

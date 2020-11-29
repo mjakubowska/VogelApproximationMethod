@@ -1,9 +1,10 @@
+from checkData.Loader import Loader
+from transportationProblem.Vogel import Vogel
 import sys
-from src.checkData.Loader import Loader
-from src.transportationProblem.Vogel import Vogel
 
 
 def main():
+    sys.path.insert(0, '../src')
     if len(sys.argv) < 1:
         print(f"brak argumentu wywołania")
         sys.exit(-1)

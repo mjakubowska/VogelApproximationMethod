@@ -1,8 +1,8 @@
 import re
 import sys
-import src.model.Producer as pr
-import src.model.Pharmacy as ph
-import src.model.Contract as cr
+import model.Producer as pr
+import model.Pharmacy as ph
+import model.Contract as cr
 
 
 class Loader:
@@ -26,6 +26,7 @@ class Loader:
             sys.exit(1)
         pr_ph_reg_ex = r"[ ]{0,}(\d+)+[ ]{0,}\|+[ ]{0,}(\w+[\w\-!@#$%^&*()+=.,<>\[\]\/{}\?\\'\";:~` ]+)\|+[ ]{0,}(\d+)"
         index_pr = -1
+        n_line = n
         while True:
             line = file.readline().rstrip()
             n += 1
@@ -39,6 +40,9 @@ class Loader:
                 self.producers.append(pr.Producer(idn, name, amount))
             else:
                 break
+        if n_line + 1 == n:
+            raise ValueError("Brak producentów w pliku")
+        n_line = n
         # print("wczytano producentów")
         if line.lstrip()[0] != "#":
             raise ValueError(
@@ -60,6 +64,9 @@ class Loader:
             else:
                 break
         # print("wczytano apteki")
+        if n_line + 1 == n:
+            raise ValueError("Brak aptek w pliku")
+        n_line = n
         line = line.rstrip()
         if line.lstrip()[0] != "#":
             raise ValueError(
@@ -104,6 +111,8 @@ class Loader:
                     raise ValueError(f"Zły index producenta w wersie {n}: \"{line}\"\n")
             else:
                 break
+        if n_line + 1 == n:
+            raise ValueError("Brak umów w pliku")
         if id_pr < len(self.producers) - 1:
             raise ValueError(f"Brakuje umów producenta o id {len(self.producers) - 1}")
         if index_pr > len(self.producers) - 1:

@@ -1,6 +1,6 @@
 from operator import attrgetter
-from src.writeFile.Deal import Deal
-from src.writeFile.Configuration import Configuration
+from writeFile.Deal import Deal
+from writeFile.Configuration import Configuration
 
 
 def find_2min_diff(min_list):
@@ -40,13 +40,17 @@ class Vogel:
             print(self.matrix[i])
 
     def _find_mins(self):
-        for rows in self.matrix:
-            self._min_r.append(find_2min_diff(rows))
-        for columns in range(len(self.matrix[0])):
-            column = []
-            for rows in range(len(self.matrix)):
-                column.append(self.matrix[rows][columns])
-            self._min_c.append(find_2min_diff(column))
+        try:
+            for rows in self.matrix:
+                self._min_r.append(find_2min_diff(rows))
+        except IndexError:
+            print("Macierz jest pusta")
+        else:
+            for columns in range(len(self.matrix[0])):
+                column = []
+                for rows in range(len(self.matrix)):
+                    column.append(self.matrix[rows][columns])
+                self._min_c.append(find_2min_diff(column))
 
     def update_rows_mins(self):
         if len(self.matrix) < 1:
