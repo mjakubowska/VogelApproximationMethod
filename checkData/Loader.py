@@ -100,7 +100,7 @@ class Loader:
             else:
                 break
         if id_pr < len(self.producers) - 1:
-            raise ValueError(f"Brakuje umów producenta o id {len(self.producers)-1}")
+            raise ValueError(f"Brakuje umów producenta o id {len(self.producers) - 1}")
         if index_pr > len(self.producers) - 1:
             raise ValueError("Za dużo producentów w umowach")
         print("wczytano umowy")
