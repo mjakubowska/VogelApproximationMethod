@@ -1,7 +1,6 @@
 import unittest
-from checkData.Loader import Loader
-from transportationProblem.Vogel import Vogel
-from model.Contract import Contract
+from src.transportationProblem.Vogel import *
+from src.model.Contract import Contract
 
 
 class TestVogel(unittest.TestCase):
@@ -74,7 +73,7 @@ class TestVogel(unittest.TestCase):
         self.assertEqual(min_c, vogel.get_min_c())
         self.assertEqual(min_r, vogel.get_min_r())
 
-    def should_fill_pharmacy(self):
+    def test_fill_pharmacy(self):
         # before
         file = open('data1.txt', 'r')
         loader = Loader('test_data1.txt' + '_result')
@@ -87,6 +86,21 @@ class TestVogel(unittest.TestCase):
         # then
         self.assertEqual(2, len(vogel.matrix))
         self.assertEqual(3, len(vogel.matrix[0]))
+        self.assertEqual(2, len(vogel.solution.deals))
+        self.assertEqual(1, vogel.solution.deals[0].producer.idn)
+        self.assertEqual(0, vogel.solution.deals[1].producer.idn)
+
+    def test_find_2min_diff(self):
+        # before
+        cr1 = Contract(0, 0, 800, 70.5)
+        cr2 = Contract(0, 1, 600, 70.0)
+        cr3 = Contract(2, 0, 900, 80.0)
+        cr4 = Contract(0, 1, 400, 65.2)
+        # when
+        numbers = [cr1, cr2, cr3, cr4]
+        # then
+        self.assertEqual(4.8, find_2min_diff(numbers))
+
 
 if __name__ == '__main__':
     unittest.main()

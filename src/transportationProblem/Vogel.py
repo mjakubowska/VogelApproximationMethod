@@ -1,7 +1,6 @@
 from operator import attrgetter
-from writeFile.Deal import Deal
-from writeFile.Configuration import Configuration
-from checkData.Loader import Loader
+from src.writeFile.Deal import Deal
+from src.writeFile.Configuration import Configuration
 
 
 def find_2min_diff(min_list):

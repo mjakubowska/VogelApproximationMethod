@@ -1,8 +1,8 @@
 import re
 import sys
-import model.Producer as pr
-import model.Pharmacy as ph
-import model.Contract as cr
+import src.model.Producer as pr
+import src.model.Pharmacy as ph
+import src.model.Contract as cr
 
 
 class Loader:

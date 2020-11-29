@@ -1,6 +1,6 @@
 import sys
-from checkData.Loader import Loader
-from transportationProblem.Vogel import Vogel
+from src.checkData.Loader import Loader
+from src.transportationProblem.Vogel import Vogel
 
 
 def main():
