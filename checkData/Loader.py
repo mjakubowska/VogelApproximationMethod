@@ -44,11 +44,15 @@ class Loader:
             raise ValueError("Brak producentów w pliku")
         n_line = n
         # print("wczytano producentów")
-        if line.lstrip()[0] != "#":
-            raise ValueError(
-                f"Błąd w wersie {n}, błędne dane producenta lub zły nagłówek: \"{line}\"\n"
-                f"Poptawna forma danych producenta: id | nazwa | dzienna produkcja\n"
-                f"Poprawny nagłówek powinien zaczynać się od znaku \"#\"")
+        try:
+            if line.lstrip()[0] != "#":
+                raise ValueError(
+                    f"Błąd w wersie {n}, błędne dane producenta lub zły nagłówek: \"{line}\"\n"
+                    f"Poptawna forma danych producenta: id | nazwa | dzienna produkcja\n"
+                    f"Poprawny nagłówek powinien zaczynać się od znaku \"#\"")
+        except IndexError:
+            print("Brak danych aptek")
+            sys.exit(1)
         index_ph = -1
         while True:
             line = file.readline()
@@ -68,11 +72,15 @@ class Loader:
             raise ValueError("Brak aptek w pliku")
         n_line = n
         line = line.rstrip()
-        if line.lstrip()[0] != "#":
-            raise ValueError(
-                 f"Błąd w wersie {n}, błędne dane apteki lub zły nagłówek: \"{line}\"\n"
-                 f"Poptawna forma danych apteki: id | nazwa | dzienne zapotrzebowanie\n"
-                 f"Poprawny nagłówek powinien zaczynać się od znaku \"#\"")
+        try:
+            if line.lstrip()[0] != "#":
+                raise ValueError(
+                     f"Błąd w wersie {n}, błędne dane apteki lub zły nagłówek: \"{line}\"\n"
+                     f"Poptawna forma danych apteki: id | nazwa | dzienne zapotrzebowanie\n"
+                     f"Poprawny nagłówek powinien zaczynać się od znaku \"#\"")
+        except IndexError:
+            print("Brak danych umów")
+            sys.exit(1)
         cr_reg_ex = r"[ ]*(\d+)+[ ]{0,}\|+[ ]*(\d+)+[ ]*\|[ ]*(\d+)+[ ]*\|+[ ]*(\d+.{0,1}\d{1,2})[ ]*"
         index_pr = -1
         index_ph = -1
