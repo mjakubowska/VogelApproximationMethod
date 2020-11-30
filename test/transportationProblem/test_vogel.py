@@ -25,7 +25,7 @@ class TestVogel(unittest.TestCase):
 
     def test_should_find_mins(self):
         # before
-        file = open('data2.txt', 'r')
+        file = open('data1.txt', 'r')
         loader = Loader('test_data1.txt' + '_result')
         loader.load_data(file)
         file.close()
