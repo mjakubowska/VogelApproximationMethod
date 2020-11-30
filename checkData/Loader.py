@@ -43,7 +43,6 @@ class Loader:
         if n_line + 1 == n:
             raise ValueError("Brak producentów w pliku")
         n_line = n
-        # print("wczytano producentów")
         try:
             if line.lstrip()[0] != "#":
                 raise ValueError(
@@ -67,7 +66,6 @@ class Loader:
                 self.pharmacies.append(ph.Pharmacy(idn, name, amount))
             else:
                 break
-        # print("wczytano apteki")
         if n_line + 1 == n:
             raise ValueError("Brak aptek w pliku")
         n_line = n
@@ -125,7 +123,6 @@ class Loader:
             raise ValueError(f"Brakuje umów producenta o id {len(self.producers) - 1}")
         if index_pr > len(self.producers) - 1:
             raise ValueError("Za dużo producentów w umowach")
-        # print("wczytano umowy")
         print(f"wczytano dane z pliku {file.name}")
 
     def set_pharmacies(self, ph_list):
